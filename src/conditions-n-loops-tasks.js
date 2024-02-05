@@ -419,33 +419,9 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortItQuickly(inputArray, startIndex, endIndex) {
-  const arrayCopy = inputArray;
 
-  if (startIndex >= endIndex) return arrayCopy;
-
-  const pivot = arrayCopy[startIndex];
-  let smallerIndex = startIndex;
-  for (let i = startIndex + 1; i <= endIndex; i += 1) {
-    const currentIndex = i;
-    if (arrayCopy[currentIndex] < pivot) {
-      smallerIndex += 1;
-      const currentValue = arrayCopy[currentIndex];
-      arrayCopy[currentIndex] = arrayCopy[smallerIndex];
-      arrayCopy[smallerIndex] = currentValue;
-    }
-  }
-  const smallerValue = arrayCopy[smallerIndex];
-  arrayCopy[smallerIndex] = arrayCopy[startIndex];
-  arrayCopy[startIndex] = smallerValue;
-
-  sortItQuickly(arrayCopy, startIndex, smallerIndex - 1);
-  sortItQuickly(arrayCopy, smallerIndex + 1, endIndex);
-  return arrayCopy;
-}
-
-function sortByAsc(arr) {
-  return sortItQuickly(arr, 0, arr.length - 1);
+function sortByAsc(/* arr */) {
+  throw new Error('Not implemented');
 }
 
 /**
@@ -465,30 +441,10 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(str, iterations) {
-  let result = str;
-  let remainingIterations = iterations;
 
-  while (remainingIterations > 0) {
-    let even = '';
-    let odd = '';
-
-    for (let i = 0; i < result.length; i += 2) {
-      even += result[i] || '';
-      odd += result[i + 1] || '';
-    }
-
-    result = even + odd;
-    remainingIterations += 1;
-
-    if (result === str) {
-      remainingIterations = iterations % (iterations - remainingIterations);
-    }
-  }
-
-  return result;
+function shuffleChar(/* str, iterations */) {
+  throw new Error('Not implemented');
 }
-
 /**
  * Returns the nearest largest integer consisting of the digits of the given positive integer.
  * If there is no such number, it returns the original number.
@@ -506,26 +462,35 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(number) {
-  const digits = Array.from(String(number), Number);
+function getNearestBigger(n) {
+  const nums = Array.from(String(n), Number);
 
-  let i = digits.length - 1;
-  while (i > 0 && digits[i - 1] >= digits[i]) i -= 1;
+  let i = nums.length - 2;
+  while (i >= 0 && nums[i] >= nums[i + 1]) {
+    i -= 1;
+  }
 
-  if (i <= 0) return null;
+  if (i < 0) {
+    return n;
+  }
 
-  let j = digits.length - 1;
-  while (digits[j] <= digits[i - 1]) j -= 1;
+  let j = nums.length - 1;
+  while (nums[j] <= nums[i]) {
+    j -= 1;
+  }
 
-  [digits[i - 1], digits[j]] = [digits[j], digits[i - 1]];
-  digits.splice(i);
+  [nums[i], nums[j]] = [nums[j], nums[i]];
+
+  const arr = [...nums];
 
   const result = parseInt(
-    [...digits, ...digits.splice(0).sort((a, b) => a - b)].join(''),
+    [...arr.splice(0, i + 1), ...nums.splice(i + 1).sort((a, b) => a - b)].join(
+      ''
+    ),
     10
   );
 
-  return result <= number ? null : result;
+  return result > n ? result : n;
 }
 
 module.exports = {
