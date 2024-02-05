@@ -420,8 +420,28 @@ function rotateMatrix(matrix) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const startArr = arr;
+  if (arr.length <= 1) return arr;
+
+  const pivot = arr[0];
+  let leftArr = [];
+  let rightArr = [];
+  for (let i = 1; i < arr.length; i += 1) {
+    if (arr[i] < pivot) {
+      leftArr[leftArr.length] = arr[i];
+    } else {
+      rightArr[rightArr.length] = arr[i];
+    }
+  }
+
+  leftArr = sortByAsc(leftArr);
+  rightArr = sortByAsc(rightArr);
+  const result = [...leftArr, pivot, ...rightArr];
+  for (let i = 0; i < result.length; i += 1) {
+    startArr[i] = result[i];
+  }
+  return startArr;
 }
 
 /**
@@ -442,8 +462,19 @@ function sortByAsc(/* arr */) {
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
 
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str;
+  for (let i = 1; i <= iterations; i += 1) {
+    let firstStr = '';
+    let secondStr = '';
+    for (let j = 0; j < str.length; j += 1) {
+      if (j % 2 === 0) firstStr += result[j];
+      if (j % 2 === 1) secondStr += result[j];
+    }
+    result = firstStr + secondStr;
+    if (result === str) return shuffleChar(str, iterations % i);
+  }
+  return result;
 }
 /**
  * Returns the nearest largest integer consisting of the digits of the given positive integer.
